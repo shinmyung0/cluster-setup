@@ -1,0 +1,190 @@
+{
+    "Job": {
+        "Region": "global",
+        "ID": "demo-service",
+        "Name": "demo-service",
+        "Type": "service",
+        "Priority": 50,
+        "AllAtOnce": false,
+        "Datacenters": [
+            "dc1"
+        ],
+        "Constraints": null,
+        "TaskGroups": [
+            {
+                "Name": "frontend",
+                "Count": 5,
+                "Constraints": null,
+                "Tasks": [
+                    {
+                        "Name": "fib",
+                        "Driver": "docker",
+                        "User": "",
+                        "Config": {
+                            "image": "shinmyung0/fib-app",
+                            "port_map": [
+                                {
+                                    "http": 10011
+                                }
+                            ]
+                        },
+                        "Constraints": null,
+                        "Env": {
+                            "DEMO_NAME": "autoscaling-demo"
+                        },
+                        "Services": [
+                            {
+                                "Id": "",
+                                "Name": "frontend-fib",
+                                "Tags": null,
+                                "PortLabel": "http",
+                                "Checks": [
+                                    {
+                                        "Id": "",
+                                        "Name": "service: \"frontend-fib\" check",
+                                        "Type": "http",
+                                        "Command": "",
+                                        "Args": null,
+                                        "Path": "/",
+                                        "Protocol": "",
+                                        "Interval": 10000000000,
+                                        "Timeout": 2000000000
+                                    }
+                                ]
+                            }
+                        ],
+                        "Resources": {
+                            "CPU": 100,
+                            "MemoryMB": 300,
+                            "DiskMB": 300,
+                            "IOPS": 0,
+                            "Networks": [
+                                {
+                                    "Public": false,
+                                    "CIDR": "",
+                                    "ReservedPorts": null,
+                                    "DynamicPorts": [
+                                        {
+                                            "Label": "http",
+                                            "Value": 0
+                                        }
+                                    ],
+                                    "IP": "",
+                                    "MBits": 10
+                                }
+                            ]
+                        },
+                        "Meta": null,
+                        "KillTimeout": 5000000000,
+                        "LogConfig": {
+                            "MaxFiles": 10,
+                            "MaxFileSizeMB": 10
+                        },
+                        "Artifacts": null
+                    }
+                ],
+                "RestartPolicy": {
+                    "Interval": 60000000000,
+                    "Attempts": 2,
+                    "Delay": 15000000000,
+                    "Mode": "delay"
+                },
+                "Meta": null
+            },
+            {
+                "Name": "backend",
+                "Count": 3,
+                "Constraints": null,
+                "Tasks": [
+                    {
+                        "Name": "redis",
+                        "Driver": "docker",
+                        "User": "",
+                        "Config": {
+                            "image": "redis:latest",
+                            "port_map": [
+                                {
+                                    "db": 6379
+                                }
+                            ]
+                        },
+                        "Constraints": null,
+                        "Env": null,
+                        "Services": [
+                            {
+                                "Id": "",
+                                "Name": "backend-redis",
+                                "Tags": [
+                                    "global",
+                                    "cache"
+                                ],
+                                "PortLabel": "db",
+                                "Checks": [
+                                    {
+                                        "Id": "",
+                                        "Name": "alive",
+                                        "Type": "tcp",
+                                        "Command": "",
+                                        "Args": null,
+                                        "Path": "",
+                                        "Protocol": "",
+                                        "Interval": 10000000000,
+                                        "Timeout": 2000000000
+                                    }
+                                ]
+                            }
+                        ],
+                        "Resources": {
+                            "CPU": 500,
+                            "MemoryMB": 256,
+                            "DiskMB": 300,
+                            "IOPS": 0,
+                            "Networks": [
+                                {
+                                    "Public": false,
+                                    "CIDR": "",
+                                    "ReservedPorts": null,
+                                    "DynamicPorts": [
+                                        {
+                                            "Label": "db",
+                                            "Value": 0
+                                        }
+                                    ],
+                                    "IP": "",
+                                    "MBits": 10
+                                }
+                            ]
+                        },
+                        "Meta": null,
+                        "KillTimeout": 5000000000,
+                        "LogConfig": {
+                            "MaxFiles": 10,
+                            "MaxFileSizeMB": 10
+                        },
+                        "Artifacts": null
+                    }
+                ],
+                "RestartPolicy": {
+                    "Interval": 60000000000,
+                    "Attempts": 2,
+                    "Delay": 15000000000,
+                    "Mode": "delay"
+                },
+                "Meta": null
+            }
+        ],
+        "Update": {
+            "Stagger": 10000000000,
+            "MaxParallel": 5
+        },
+        "Periodic": null,
+        "Meta": null,
+        "Status": "",
+        "StatusDescription": "",
+        "CreateIndex": 0,
+        "ModifyIndex": 0,
+        "JobModifyIndex": 0
+    },
+    "EnforceIndex": false,
+    "JobModifyIndex": 0
+}
